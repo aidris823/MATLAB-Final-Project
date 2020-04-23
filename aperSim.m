@@ -67,3 +67,16 @@ colormap gray % Set the color of the aperture field plot
 axis equal % Set the display scale of the axes
 axis([0 apL 0 apL]) % Set axes limits to size of aperture field
 
+% Do a Fourier transform of the aperture
+ap_trans = fft(ap); % Apply the transform to the aperture
+real_trans = real(ap_trans); % Take the real part
+Io = real_trans.^2; % Square the real part to obtain irradiance
+I = Io.^0.2; % Re-scale the real part
+
+figure(2); clf % Create a new figure
+imagesc(I) % Plot the irradiance pattern
+title('Fraunhofer Diffraction Pattern') % Set the title
+xlabel('x [Pixels]') % Label x-axis
+ylabel('y [Pixels]') % Label y-axis
+colormap gray % Set the color of the field plot
+
