@@ -21,7 +21,7 @@ ap = zeros(apL); % Define actual aperture plane
 % slH = 2500;
 % for i = round(1 + apL./2 - slH./2):round(1 + apL./2 + slH./2)
 %     for j = round(1 + apL./2 - slW./2):round(1 + apL./2 + slW./2)
-%         app(i,j) = 1;
+%         ap(i,j) = 1;
 %     end
 % end
 
