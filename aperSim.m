@@ -8,13 +8,13 @@
 apL = 5000; % Size of the aperture field
 ap = zeros(apL); % Define actual aperture plane
 
-% Define Square Dimensions
-% sqL = 500; % Define square length
-% for i = round(1 + apL./2 - sqL./2):round(1 + apL./2 + sqL./2)
-%     for j = round(1 + apL./2 - sqL./2):round(1 + apL./2 + sqL./2)
-%         ap(i,j) = 1;
-%     end
-% end
+%Define Square Dimensions
+sqL = 500; % Define square length
+for i = round(1 + apL./2 - sqL./2):round(1 + apL./2 + sqL./2)
+    for j = round(1 + apL./2 - sqL./2):round(1 + apL./2 + sqL./2)
+        ap(i,j) = 1;
+    end
+end
 
 %Define Single Slit Dimensions
 % slW = 200;
@@ -57,8 +57,8 @@ ap = zeros(apL); % Define actual aperture plane
 %     end
 % end
 
-% Plot the aperture field
-figure
+% Aperture Field Figure Details 
+figure (1)
 imagesc(ap) % Plot image of the aperture field
 title("Aperture")
 xlabel("x [Pixels]")
@@ -68,15 +68,50 @@ axis equal % Set the display scale of the axes
 axis([0 apL 0 apL]) % Set axes limits to size of aperture field
 
 % Do a Fourier transform of the aperture
-ap_trans = fft(ap); % Apply the transform to the aperture
+ap_trans = fftshift(fft2(ap)); % Apply the transform to the aperture
 real_trans = real(ap_trans); % Take the real part
 Io = real_trans.^2; % Square the real part to obtain irradiance
-I = Io.^0.2; % Re-scale the real part
+I = Io.^0.3; % Re-scale the real part of the irradiance
 
-figure(2); clf % Create a new figure
+%Diffraction Pattern Figure Details
+figure(2) % Create a new figure
 imagesc(I) % Plot the irradiance pattern
 title('Fraunhofer Diffraction Pattern') % Set the title
 xlabel('x [Pixels]') % Label x-axis
 ylabel('y [Pixels]') % Label y-axis
 colormap gray % Set the color of the field plot
 
+%Central Diffraction Pattern Figure
+figure(3)
+I2 = I(round(1+apL/2-125):round(1+apL/2+125),round(1+apL/2-125):round(1+apL/2+125));
+imagesc(I2) % Plot the irradiance pattern
+title('Fraunhofer Diffraction Pattern') % Set the title
+xlabel('x [Pixels]') % Label x-axis
+ylabel('y [Pixels]') % Label y-axis
+colormap gray % Set the color of the field plot
+
+frI = Io(apL./2,:);
+sdI = Io(:,apL./2);
+x4 = linspace(1,apL,apL);
+
+%Cross Section Figure Details
+figure (4)
+sgtitle('Cross Sections')
+
+%Front Cross Section Subplot
+subplot(2,1,1)
+    plot(x4,frI)
+    title('"Front"') % Set the title
+    xlabel('x [Pixels]') % Label x-axis
+    ylabel('y [Pixels]') % Label y-axis
+    xlim([2300 2700])
+    ylim([0 6.2.*10.^9])
+
+%Side Cross Section Subplot
+subplot(2,1,2)
+    plot(x4,sdI)
+    title('"Perpendicular Side"') % Set the title
+    xlabel('x [Pixels]') % Label x-axis
+    ylabel('y [Pixels]') % Label y-axis
+    xlim([2300 2700]) 
+    ylim([0 6.2.*10.^9])
